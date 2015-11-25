@@ -1,5 +1,5 @@
 FROM mariadb:10.0
-
+MAINTAINER Adam Craven <adam@ChannelAdam.com>
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-galera-server && \
     apt-get clean && \
@@ -12,6 +12,7 @@ ADD run.sh /
 VOLUME /var/lib/mysql
 
 ENTRYPOINT ["/run.sh"]
+RUN chmod +x /run.sh
 
 EXPOSE 3306 4567 4444
 CMD ["mysqld"]
