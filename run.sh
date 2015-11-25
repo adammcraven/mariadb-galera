@@ -6,7 +6,7 @@ if [ "$NODE_IP" ]; then
 fi
 
 if [ "$MYSQL_CLUSTER_NAME" ]; then
-	echo"wsrep_cluster_name=$MYSQL_CLUSTER_NAME" >> /etc/mysql/conf.d/galera.cnf
+	echo "wsrep_cluster_name=$MYSQL_CLUSTER_NAME" >> /etc/mysql/conf.d/galera.cnf
 fi
 
 if [ "$CLUSTER_ADDRESS" ]; then
