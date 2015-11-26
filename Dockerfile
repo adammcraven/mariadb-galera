@@ -1,5 +1,7 @@
-FROM mariadb:10.0
 MAINTAINER Adam Craven <adam@ChannelAdam.com>
+
+FROM mariadb:10.0
+
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-galera-server && \
     apt-get clean && \

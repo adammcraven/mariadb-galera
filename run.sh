@@ -16,5 +16,4 @@ fi
 echo "wsrep_cluster_address=${CLUSTER_ADDRESS-gcomm://}" >> /etc/mysql/conf.d/galera.cnf
 
 sed '/^[\t].mysqld/s/mysqld/"$@"/' -i /docker-entrypoint.sh
-sed '/mysql_tzinfo_to_sql/d' -i /docker-entrypoint.sh
 exec /docker-entrypoint.sh "$@"
