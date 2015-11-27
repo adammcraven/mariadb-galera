@@ -201,9 +201,6 @@ configure_galera_config_file
 
 rm -f /tmp/init_mysql.sql
 
-echo "==> Running MariaDB Docker container's docker-entrypoint.sh"
-exec /docker-entrypoint.sh "$@"
-
 #create_custom_database
 #create_user
 configure_replication
@@ -212,5 +209,11 @@ if [ "$DB_REPLICATION_MODE" = "slave" ]; then
   ensure_slave_connects_to_master
   snapshot_master_data_for_slave
 fi
+
+echo "==> Running the init_mysql commands" >> /docker-entrypoint.sh 
+echo "mysql < /tmp/init_mysql.sql" >> /docker-entrypoint.sh
+
+echo "==> Running MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
+exec /docker-entrypoint.sh "$@"
 
 echo "==> End of run.sh"
