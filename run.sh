@@ -230,6 +230,7 @@ fi
 # remove last line which is: exec "$@" so we can inject our script
 head -n -1 /docker-entrypoint.sh > /docker-entrypoint2.sh
 mv /docker-entrypoint2.sh /docker-entrypoint.sh
+chmod +x /docker-entrypoint.sh
 
 (
 cat <<'EOM'
