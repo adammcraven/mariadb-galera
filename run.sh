@@ -232,15 +232,15 @@ head -n -1 /docker-entrypoint.sh > /docker-entrypoint.sh
 
 read -r -d '' script << EOM
   echo "==> Starting db daemon in background"
-  \$@ &
+  $@ &
 
   echo "==> Waiting for database daemon to respond (60s timeout)..." 
   timeout=60
   while ! mysql status >/dev/null 2>&1
   do
-    echo "    ==> Timeout in \$timeout seconds..."  
-    timeout=\$(expr \$timeout - 1)
-    if [[ \$timeout -eq 0 ]]; then
+    echo "    ==> Timeout in $timeout seconds..."  
+    timeout=$(expr $timeout - 1)
+    if [[ $timeout -eq 0 ]]; then
       echo "Database daemon not responding"
       echo ""
       exit -1
