@@ -210,9 +210,12 @@ if [ "$DB_REPLICATION_MODE" = "slave" ]; then
   snapshot_master_data_for_slave
 fi
 
+# remove last line which is: exec "$@" so we can inject our script
+head -n -1 /docker-entrypoint.sh > /docker-entrypoint.sh
 echo "mysql status" >> /docker-entrypoint.sh
 echo "==> Running the init_mysql commands" >> /docker-entrypoint.sh 
 echo "mysql source /tmp/init_mysql.sql" >> /docker-entrypoint.sh
+echo 'exec "$@"' >> /docker-entrypoint.sh
 
 echo "==> Running MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
 exec /docker-entrypoint.sh "$@"
