@@ -230,7 +230,7 @@ fi
 # remove last line which is: exec "$@" so we can inject our script
 head -n -1 /docker-entrypoint.sh > /docker-entrypoint.sh
 
-read -r -d '' script << EOM
+read -r -d '' script <<EOM
   echo "==> Starting db daemon in background"
   $@ &
 
