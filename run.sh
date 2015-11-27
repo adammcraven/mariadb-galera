@@ -190,6 +190,23 @@ snapshot_master_data_for_slave() {
   echo ""
 }
 
+wait_for_db_daemon_to_respond() {
+  echo "==> Waiting for database daemon to respond (60s timeout)..."
+  timeout=60
+  while ! mysqladmin status >/dev/null 2>&1
+  do
+    echo "    ==> Timeout in $timeout seconds..."  
+    timeout=$(expr $timeout - 1)
+    if [[ $timeout -eq 0 ]]; then
+      echo "Database daemon not responding"
+      echo ""
+      exit -1
+    fi
+    sleep 1
+  done
+  echo
+}
+
 
 #############################################
 ################## Start ####################
@@ -212,12 +229,26 @@ fi
 
 # remove last line which is: exec "$@" so we can inject our script
 head -n -1 /docker-entrypoint.sh > /docker-entrypoint.sh
-echo "mysql status" >> /docker-entrypoint.sh
+
+echo "==> Starting db daemon in background" >> /docker-entrypoint.sh
+echo '$@ &' >> /docker-entrypoint.sh
+echo "  
+  echo \"==> Waiting for database daemon to respond (60s timeout)...\" 
+  timeout=60
+  while ! mysql status >/dev/null 2>&1
+  do
+    echo \"    ==> Timeout in $timeout seconds...\"  
+    timeout=$(expr $timeout - 1)
+    if [[ $timeout -eq 0 ]]; then
+      echo \"Database daemon not responding\"
+      echo \"\"
+      exit -1
+    fi
+    sleep 1
+  done
+  echo" >> /docker-entrypoint.sh
 echo "==> Running the init_mysql commands" >> /docker-entrypoint.sh 
 echo "mysql source /tmp/init_mysql.sql" >> /docker-entrypoint.sh
-echo 'exec "$@"' >> /docker-entrypoint.sh
 
 echo "==> Running MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
 exec /docker-entrypoint.sh "$@"
-
-echo "==> End of run.sh"
