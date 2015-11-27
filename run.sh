@@ -253,7 +253,7 @@ read -r -d '' script <<EOM
 
   echo "==> Running the init_mysql commands" 
   mysql source /tmp/init_mysql.sql
-EOM  
+EOM
 
 echo $script >> /docker-entrypoint.sh
 
