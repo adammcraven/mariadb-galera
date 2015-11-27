@@ -231,8 +231,8 @@ fi
 head -n -1 /docker-entrypoint.sh > /docker-entrypoint2.sh
 mv /docker-entrypoint2.sh /docker-entrypoint.sh
 
-IFS=
-read -r -d '' script <<EOM
+(
+cat <<'EOM'
   echo "==> Starting db daemon in background"
   $@ &
 
@@ -254,8 +254,7 @@ read -r -d '' script <<EOM
   echo "==> Running the init_mysql commands" 
   mysql source /tmp/init_mysql.sql
 EOM
-
-echo $script >> /docker-entrypoint.sh
+) >> /docker-entrypoint.sh
 
 echo "==> Running MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
 exec /docker-entrypoint.sh "$@"
