@@ -228,7 +228,8 @@ if [ "$DB_REPLICATION_MODE" = "slave" ]; then
 fi
 
 # remove last line which is: exec "$@" so we can inject our script
-head -n -1 /docker-entrypoint.sh > /docker-entrypoint.sh
+head -n -1 /docker-entrypoint.sh > /docker-entrypoint2.sh
+mv /docker-entrypoint2.sh /docker-entrypoint.sh
 
 IFS=
 read -r -d '' script <<EOM
@@ -254,7 +255,7 @@ read -r -d '' script <<EOM
   mysql source /tmp/init_mysql.sql
 EOM  
 
-echo "$script" >> /docker-entrypoint.sh
+echo $script >> /docker-entrypoint.sh
 
 echo "==> Running MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
 exec /docker-entrypoint.sh "$@"
