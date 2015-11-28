@@ -14,6 +14,7 @@ ADD run.sh /
 
 ENTRYPOINT ["/run.sh"]
 RUN chmod +x /run.sh
+RUN chmod +x /docker-entrypoint-bb.sh
 
 EXPOSE 3306 4567 4444
 CMD ["mysqld"]
