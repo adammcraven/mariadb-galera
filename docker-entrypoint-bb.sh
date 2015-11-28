@@ -197,15 +197,13 @@ configure_galera_config_file() {
 
 
 configure_new_instance() {
-
+  echo "==> Configuring for a new instance"
   configure_galera_config_file
-  
 }
 
 configure_existing_instance() {
-  
+  echo "==> Configuring for an existing instance"
   configure_galera_config_file
-  
 }
 
 
@@ -256,13 +254,15 @@ wait_for_db_daemon_to_respond() {
 }
 
 run_instance() {
-  echo "==> Starting db daemon in background"
+  echo "==> Starting db daemon in background - command is: '$@'"
   $@ &
   pid=$!
+  echo "==> db daemon pid: $pid"
   
   wait_for_db_daemon_to_respond
   verify_galera_cluster_is_started
   
+  echo "==> db daemon is running..."
   wait $pid
   echo "==> '$@' has ended - and docker container will now finish"
 }
