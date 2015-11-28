@@ -8,7 +8,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 VOLUME /var/lib/mysql
-ADD galera.cnf /etc/mysql/conf.d/
 ADD docker-entrypoint-bb.sh /
 ADD run.sh /
 

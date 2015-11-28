@@ -166,33 +166,45 @@ snapshot_master_data_for_slave() {
 ########################################################################################################################
 
 configure_galera_config_file() {
-  rm -f /etc/mysql/conf.d/galera-tmp.cnf
-  echo "[mysqld]" > /etc/mysql/conf.d/galera-tmp.cnf 
+  galeraConf="/etc/mysql/conf.d/galera-tmp.cnf"
+  rm -f $galeraConf
+
+  echo "==> Creating the Galera config file"
+  ( cat <<"EOM"
+[mysqld]
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+binlog_format=ROW
+innodb_autoinc_lock_mode=2
+innodb_doublewrite=1
+query_cache_size=0
+wsrep_on=ON
+EOM
+  ) >> $galeraConf
 
   if [ "$CLUSTER_START_MODE" = "new" ]; then
-    echo "==> Starting a new db cluster"
-    echo "wsrep_new_cluster=true" >> /etc/mysql/conf.d/galera-tmp.cnf
+    echo "==> Configuring for a new galera db cluster"
+    echo "wsrep_new_cluster=true" >> $galeraConf
   fi
 
   if [ "$CLUSTER_START_MODE" = "restart" ]; then
-    echo "==> Starting an existing db cluster"
+    echo "==> Configuring for an existing galera db cluster"
     echo "TODO - restart CLUSTER_START_MODE"
     exit -1
   fi
 
   if [ $NODE_IP ]; then
-    echo "wsrep_node_address=$NODE_IP" >> /etc/mysql/conf.d/galera-tmp.cnf
+    echo "wsrep_node_address=$NODE_IP" >> $galeraConf
   fi
 
   if [ $MYSQL_CLUSTER_NAME ]; then
-    echo "wsrep_cluster_name=$MYSQL_CLUSTER_NAME" >> /etc/mysql/conf.d/galera-tmp.cnf
+    echo "wsrep_cluster_name=$MYSQL_CLUSTER_NAME" >> $galeraConf
   fi
 
   if [ $CLUSTER_ADDRESS ] && [ ! $MYSQL_ROOT_PASSWORD ]; then
     export MYSQL_ALLOW_EMPTY_PASSWORD="yes"
   fi
 
-  echo "wsrep_cluster_address=gcomm://${CLUSTER_ADDRESS}" >> /etc/mysql/conf.d/galera-tmp.cnf
+  echo "wsrep_cluster_address=gcomm://${CLUSTER_ADDRESS}" >> $galeraConf
 }
 
 

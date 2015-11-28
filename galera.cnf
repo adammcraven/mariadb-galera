@@ -1,7 +1,0 @@
-[mysqld]
-wsrep_provider=/usr/lib/galera/libgalera_smm.so
-binlog_format=ROW
-innodb_autoinc_lock_mode=2
-innodb_doublewrite=1
-query_cache_size=0
-wsrep_on=ON
