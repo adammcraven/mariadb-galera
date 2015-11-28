@@ -254,12 +254,14 @@ chmod +x /docker-entrypoint.sh
     sleep 1
   done
   echo
-EOM ) >> /docker-entrypoint.sh
+EOM
+) >> /docker-entrypoint.sh
 
 ( cat <<'EOM'
 #  echo "==> Running the init_mysql commands" 
 #  mysql source /tmp/init_mysql.sql
-EOM ) >> /docker-entrypoint.sh
+EOM
+) >> /docker-entrypoint.sh
 
 ( cat <<'EOM'
   clusterSize=$(mysql -se 'SELECT VARIABLE_VALUE FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"')
@@ -270,7 +272,8 @@ EOM ) >> /docker-entrypoint.sh
       echo ""
       exit -1
   fi
-EOM ) >> /docker-entrypoint.sh
+EOM
+) >> /docker-entrypoint.sh
 
 if [ "$CLUSTER_START_MODE" = "new" ]; then
   ( cat <<'EOM'
@@ -279,13 +282,15 @@ if [ "$CLUSTER_START_MODE" = "new" ]; then
       echo ""
       exit -1
   fi
-EOM ) >> /docker-entrypoint.sh
+EOM
+  ) >> /docker-entrypoint.sh
 fi
 
 ( cat <<'EOM'
   wait $pid
   echo "==> '$@' has ended - and docker container will now finish"
-EOM ) >> /docker-entrypoint.sh
+EOM
+) >> /docker-entrypoint.sh
 
 echo "==> Running MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
 exec /docker-entrypoint.sh "$@"
