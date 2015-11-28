@@ -232,6 +232,7 @@ configure_existing_instance() {
 
 
 verify_galera_cluster_is_started() {
+  echo "==> Checking if Galera cluster is up"
   clusterSize=$(mysql -se 'SELECT VARIABLE_VALUE FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"')
   echo "==> Galera cluster size is now: $clusterSize"
   
@@ -251,7 +252,7 @@ verify_galera_cluster_is_started() {
 wait_for_db_daemon_to_respond() {
   echo "==> Waiting for database daemon to respond (60s timeout)..."
   timeout=60
-  while ! mysqladmin ping >/dev/null 2>&1
+  while ! mysqladmin -u root ping >/dev/null 2>&1
   do
     echo "    ==> Timeout in $timeout seconds..."  
     timeout=$(expr $timeout - 1)
@@ -262,6 +263,7 @@ wait_for_db_daemon_to_respond() {
     fi
     sleep 1
   done
+  echo "==> Database is up"
   echo
 }
 
