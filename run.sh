@@ -243,7 +243,7 @@ cat <<'EOM'
 
   echo "==> Waiting for database daemon to respond (60s timeout)..." 
   timeout=60
-  while ! mysqladmin status >/dev/null 2>&1
+  while ! mysqladmin ping >/dev/null 2>&1
   do
     echo "    ==> Timeout in $timeout seconds..."  
     timeout=$(expr $timeout - 1)
@@ -258,6 +258,15 @@ cat <<'EOM'
 
 #  echo "==> Running the init_mysql commands" 
 #  mysql source /tmp/init_mysql.sql
+
+  clusterSize = $(mysql -se 'SELECT VARIABLE_VALUE FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"'
+  echo "==> Galera cluster size is now: $clusterSize"
+  
+  if [ "$clusterSize" = "0" ]; then
+      echo "Galera cluster size is 0"
+      echo ""
+      exit -1
+  fi
 
   wait $pid
   echo "==> '$@' has ended - and docker container will now finish"
