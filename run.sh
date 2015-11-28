@@ -207,6 +207,10 @@ wait_for_db_daemon_to_respond() {
   echo
 }
 
+wait_for_galera_cluster_node_to_start() {
+ 
+#  mysql -u root -p -e 'SELECT VARIABLE_VALUE as "cluster size" FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"'
+}
 
 #############################################
 ################## Start ####################
@@ -216,16 +220,16 @@ echo "==> Start of run.sh"
 
 configure_galera_config_file
 
-rm -f /tmp/init_mysql.sql
+#rm -f /tmp/init_mysql.sql
 
 #create_custom_database
 #create_user
-configure_replication
+#configure_replication
 
-if [ "$DB_REPLICATION_MODE" = "slave" ]; then  
-  ensure_slave_connects_to_master
-  snapshot_master_data_for_slave
-fi
+#if [ "$DB_REPLICATION_MODE" = "slave" ]; then  
+#  ensure_slave_connects_to_master
+#  snapshot_master_data_for_slave
+#fi
 
 # remove last line which is: exec "$@" so we can inject our script
 head -n -1 /docker-entrypoint.sh > /docker-entrypoint2.sh
@@ -252,8 +256,11 @@ cat <<'EOM'
   done
   echo
 
-  echo "==> Running the init_mysql commands" 
-  mysql source /tmp/init_mysql.sql
+#  echo "==> Running the init_mysql commands" 
+#  mysql source /tmp/init_mysql.sql
+
+
+
 EOM
 ) >> /docker-entrypoint.sh
 
