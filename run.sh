@@ -239,7 +239,7 @@ cat <<'EOM'
 
   echo "==> Waiting for database daemon to respond (60s timeout)..." 
   timeout=60
-  while ! mysql status >/dev/null 2>&1
+  while ! mysqladmin status >/dev/null 2>&1
   do
     echo "    ==> Timeout in $timeout seconds..."  
     timeout=$(expr $timeout - 1)
