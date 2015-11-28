@@ -284,7 +284,7 @@ run_instance() {
 ################## Start ####################
 #############################################
 
-echo "==> Start of BoxBetty's docker-entrypoint-bb.sh"
+echo "==> Start of BoxBetty's docker-entrypoint-bb.sh with parameters: '$@'"
 
 if [ "$IS_NEW_INSTANCE" = "true" ]; then
   # MariaDB's docker-entrypoint.sh would have initialised a new database instance by now ;)
