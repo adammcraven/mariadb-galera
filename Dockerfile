@@ -9,6 +9,7 @@ RUN apt-get update && \
 
 VOLUME /var/lib/mysql
 ADD galera.cnf /etc/mysql/conf.d/
+ADD docker-entrypoint-bb.sh /
 ADD run.sh /
 
 ENTRYPOINT ["/run.sh"]
