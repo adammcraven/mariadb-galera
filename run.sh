@@ -15,7 +15,7 @@ fi
 modDockerEntryPoint="/docker-entrypoint-modified.sh"
 head -n -1 /docker-entrypoint.sh > $modDockerEntryPoint
 chmod +x $modDockerEntryPoint
-echo "exec /docker-entrypoint-bb.sh \$@" >> $modDockerEntryPoint
+echo "exec /docker-entrypoint-bb.sh \"\$@\"" >> $modDockerEntryPoint
 
 echo "==> Running modified MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
-exec $modDockerEntryPoint $@
+exec $modDockerEntryPoint "$@"

@@ -267,15 +267,15 @@ wait_for_db_daemon_to_respond() {
 
 run_instance() {
   echo "==> Starting db daemon in background - command is: '$@'"
-  $@ &
-  pid=$!
+  "$@" &
+  pid="$!"
   echo "==> db daemon pid: $pid"
   
   wait_for_db_daemon_to_respond
   verify_galera_cluster_is_started
   
   echo "==> db daemon is running..."
-  wait $pid
+  wait "$pid"
   echo "==> '$@' has ended - and docker container will now finish"
 }
 
