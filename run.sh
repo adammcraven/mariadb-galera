@@ -169,7 +169,7 @@ ensure_slave_connects_to_master() {
   do
     timeout=$(expr $timeout - 1)
     if [[ $timeout -eq 0 ]]; then
-      echo "Could not connect to replication master"
+      echo "==> Could not connect to replication master"
       echo ""
       exit -1
     fi
@@ -198,7 +198,7 @@ wait_for_db_daemon_to_respond() {
     echo "    ==> Timeout in $timeout seconds..."  
     timeout=$(expr $timeout - 1)
     if [[ $timeout -eq 0 ]]; then
-      echo "Database daemon not responding"
+      echo "==> Database daemon not responding"
       echo ""
       exit -1
     fi
@@ -235,8 +235,7 @@ head -n -1 /docker-entrypoint.sh > /docker-entrypoint2.sh
 mv /docker-entrypoint2.sh /docker-entrypoint.sh
 chmod +x /docker-entrypoint.sh
 
-(
-cat <<'EOM'
+( cat <<'EOM'
   echo "==> Starting db daemon in background"
   $@ &
   pid=$!
@@ -248,30 +247,45 @@ cat <<'EOM'
     echo "    ==> Timeout in $timeout seconds..."  
     timeout=$(expr $timeout - 1)
     if [[ $timeout -eq 0 ]]; then
-      echo "Database daemon not responding"
+      echo "==> Database daemon not responding"
       echo ""
       exit -1
     fi
     sleep 1
   done
   echo
+EOM ) >> /docker-entrypoint.sh
 
+( cat <<'EOM'
 #  echo "==> Running the init_mysql commands" 
 #  mysql source /tmp/init_mysql.sql
+EOM ) >> /docker-entrypoint.sh
 
+( cat <<'EOM'
   clusterSize=$(mysql -se 'SELECT VARIABLE_VALUE FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"')
   echo "==> Galera cluster size is now: $clusterSize"
   
   if [ "$clusterSize" = "0" ]; then
-      echo "Galera cluster size is 0"
+      echo "==> Galera cluster size is 0"
       echo ""
       exit -1
   fi
+EOM ) >> /docker-entrypoint.sh
 
+if [ "$CLUSTER_START_MODE" = "new" ]; then
+  ( cat <<'EOM'
+  if [ "$clusterSize" != "1" ]; then
+      echo "==> Galera cluster size is not 1 - so something is wrong starting a new Galera cluster"
+      echo ""
+      exit -1
+  fi
+EOM ) >> /docker-entrypoint.sh
+fi
+
+( cat <<'EOM'
   wait $pid
   echo "==> '$@' has ended - and docker container will now finish"
-EOM
-) >> /docker-entrypoint.sh
+EOM ) >> /docker-entrypoint.sh
 
 echo "==> Running MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
 exec /docker-entrypoint.sh "$@"
