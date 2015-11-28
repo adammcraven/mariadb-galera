@@ -233,7 +233,7 @@ configure_existing_instance() {
 
 verify_galera_cluster_is_started() {
   echo "==> Checking if Galera cluster is up"
-  clusterSize=$(mysql -u root -se 'SELECT VARIABLE_VALUE FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"')
+  clusterSize=$(mysql -u root -p$MYSQL_ROOT_PASSWORD -se 'SELECT VARIABLE_VALUE FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"')
   echo "==> Galera cluster size is now: $clusterSize"
   
   if [ "$clusterSize" = "0" ]; then
