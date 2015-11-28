@@ -239,6 +239,7 @@ chmod +x /docker-entrypoint.sh
 cat <<'EOM'
   echo "==> Starting db daemon in background"
   $@ &
+  pid=$!
 
   echo "==> Waiting for database daemon to respond (60s timeout)..." 
   timeout=60
@@ -258,8 +259,8 @@ cat <<'EOM'
 #  echo "==> Running the init_mysql commands" 
 #  mysql source /tmp/init_mysql.sql
 
-
-
+  wait $pid
+  echo "==> '$@' has ended - and docker container will now finish"
 EOM
 ) >> /docker-entrypoint.sh
 
