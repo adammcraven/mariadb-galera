@@ -207,10 +207,9 @@ wait_for_db_daemon_to_respond() {
   echo
 }
 
-wait_for_galera_cluster_node_to_start() {
- 
+#wait_for_galera_cluster_node_to_start() {
 #  mysql -u root -p -e 'SELECT VARIABLE_VALUE as "cluster size" FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"'
-}
+#}
 
 #############################################
 ################## Start ####################
