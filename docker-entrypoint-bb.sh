@@ -286,10 +286,7 @@ run_instance() {
 
 echo "==> Start of BoxBetty's docker-entrypoint-bb.sh"
 
-DATADIR=$(my_print_defaults mysqld | grep -- "--datadir" | cut -f2 -d"=")
-echo "==> DATADIR is '$DATADIR'"
-
-if [ ! -d "$DATADIR/mysql" ]; then
+if [ "$IS_NEW_INSTANCE" = "true" ]; then
   # MariaDB's docker-entrypoint.sh would have initialised a new database instance by now ;)
   configure_new_instance
 else 
