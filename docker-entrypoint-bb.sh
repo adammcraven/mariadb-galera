@@ -187,9 +187,7 @@ EOM
   fi
 
   if [ "$CLUSTER_START_MODE" = "restart" ]; then
-    echo "==> Configuring for an existing galera db cluster"
-    echo "TODO - restart CLUSTER_START_MODE"
-    exit -1
+    echo "==> Configuring to restart an existing galera db cluster"
   fi
 
   if [ $NODE_IP ]; then
@@ -247,6 +245,7 @@ verify_galera_cluster_is_started() {
     echo
     exit -1
   fi
+  echo
 }
 
 wait_for_db_daemon_to_respond() {
