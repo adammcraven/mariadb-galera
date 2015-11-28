@@ -259,7 +259,7 @@ cat <<'EOM'
 #  echo "==> Running the init_mysql commands" 
 #  mysql source /tmp/init_mysql.sql
 
-  clusterSize = $(mysql -se 'SELECT VARIABLE_VALUE FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"')
+  clusterSize=$(mysql -se 'SELECT VARIABLE_VALUE FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME="wsrep_cluster_size"')
   echo "==> Galera cluster size is now: $clusterSize"
   
   if [ "$clusterSize" = "0" ]; then
