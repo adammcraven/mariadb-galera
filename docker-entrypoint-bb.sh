@@ -288,10 +288,10 @@ echo "==> Start of BoxBetty's docker-entrypoint-bb.sh with parameters: '$@'"
 
 if [ "$IS_NEW_INSTANCE" = "true" ]; then
   # MariaDB's docker-entrypoint.sh would have initialised a new database instance by now ;)
-  configure_new_instance
+  configure_new_instance $@
 else 
   # MariaDB's docker-entrypoint.sh would have done absolutely nothing in this case ;)
-  configure_existing_instance
+  configure_existing_instance $@
 fi
 
 run_instance
