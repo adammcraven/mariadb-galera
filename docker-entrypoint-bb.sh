@@ -181,12 +181,12 @@ wsrep_on=ON
 EOM
   ) >> $galeraConf
 
-  if [ "$CLUSTER_START_MODE" = "new" ]; then
-    echo "==> Configuring for a new galera db cluster"
+  if [ "$BOOTSTRAP_CLUSTER" = "true" ]; then
+    echo "==> Configuring for bootstrapping a new galera db cluster"
     echo "wsrep_new_cluster=true" >> $galeraConf
   fi
 
-  if [ "$CLUSTER_START_MODE" = "restart" ]; then
+  if [ ! $BOOTSTRAP_CLUSTER ] || [ "$BOOTSTRAP_CLUSTER" = "false" ]; then
     echo "==> Configuring to restart an existing galera db cluster"
   fi
 
@@ -240,8 +240,8 @@ verify_galera_cluster_is_started() {
     exit -1
   fi
   
-  if [ "$CLUSTER_START_MODE" = "new" ] && [ "$clusterSize" != "1" ]; then
-    echo "==> ERROR: Galera cluster size is not 1 - so something is wrong starting a new Galera cluster"
+  if [ "$BOOTSTRAP_CLUSTER" = "true" ] && [ "$clusterSize" != "1" ]; then
+    echo "==> ERROR: Galera cluster size is not 1 - so something is wrong if you are trying to bootstrap a new Galera cluster"
     echo
     exit -1
   fi
