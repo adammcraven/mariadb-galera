@@ -1,1 +1,1 @@
-# mariadb-galera
+# mariadb-galera-docker
