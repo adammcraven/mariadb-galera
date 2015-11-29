@@ -172,12 +172,14 @@ configure_galera_config_file() {
   echo "==> Creating the Galera config file"
   ( cat <<"EOM"
 [mysqld]
-wsrep_provider=/usr/lib/galera/libgalera_smm.so
 binlog_format=ROW
 innodb_autoinc_lock_mode=2
 innodb_doublewrite=1
 query_cache_size=0
 wsrep_on=ON
+#galera settings
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+wsrep_sst_method=rsync
 EOM
   ) >> $galeraConf
 
@@ -187,7 +189,7 @@ EOM
   fi
 
   if [ ! $BOOTSTRAP_CLUSTER ] || [ "$BOOTSTRAP_CLUSTER" = "false" ]; then
-    echo "==> Configuring to restart an existing galera db cluster"
+    echo "==> Configuring to start instance into an existing galera db cluster"
   fi
 
   if [ $NODE_IP ]; then
