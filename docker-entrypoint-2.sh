@@ -24,13 +24,13 @@ create_user() {
   fi
 
   if [ "$MYSQL_USER" = "root" ] && [ ! $MYSQL_ROOT_PASSWORD ]; then
-    echo "In order to use a root MYSQL_USER you need to provide the MYSQL_ROOT_PASSWORD as well"
+    echo "==> In order to use a root MYSQL_USER you need to provide the MYSQL_ROOT_PASSWORD as well"
     echo ""
     exit -1
   fi
 
   if [ "$MYSQL_USER" != "root" ] && [ ! $MYSQL_DATABASE ]; then
-    echo "In order to use a custom MYSQL_USER you need to provide the DB_DATABASE as well"
+    echo "==> In order to use a custom MYSQL_USER you need to provide the DB_DATABASE as well"
     echo ""
     exit -1
   fi
@@ -57,7 +57,7 @@ create_user() {
 
 validate_db_database() {
   if [ ! $MYSQL_DATABASE ]; then
-    echo "You need to provide the DB_DATABASE"
+    echo "==> You need to provide the DB_DATABASE"
     echo ""
     exit -1
   fi
@@ -65,7 +65,7 @@ validate_db_database() {
 
 validate_db_master_host() {
   if [ ! $DB_MASTER_HOST ]; then
-    echo "You need to provide the DB_MASTER_HOST"
+    echo "==> You need to provide the DB_MASTER_HOST"
     echo ""
     exit -1
   fi
@@ -73,7 +73,7 @@ validate_db_master_host() {
 
 validate_db_master_user() {
   if [ ! $DB_MASTER_USER ]; then
-    echo "You need to provide the DB_MASTER_USER"
+    echo "==> You need to provide the DB_MASTER_USER"
     echo ""
     exit -1
   fi
@@ -81,7 +81,7 @@ validate_db_master_user() {
 
 validate_db_master_password() {
   if [ ! $DB_MASTER_PASSWORD ]; then
-    echo "You need to provide the DB_MASTER_PASSWORD"
+    echo "==> You need to provide the DB_MASTER_PASSWORD"
     echo ""
     exit -1
   fi
@@ -98,7 +98,7 @@ configure_mariadb_replication() {
         echo "GRANT REPLICATION SLAVE ON *.* TO '$DB_REPLICATION_USER'@'%' IDENTIFIED BY '$DB_REPLICATION_PASSWORD';" >> /tmp/init_mysql.sql
         echo "FLUSH PRIVILEGES ;" >> /tmp/init_mysql.sql
       else
-        echo "In order to setup a replication master you need to provide the DB_REPLICATION_USER as well"
+        echo "==> In order to setup a replication master you need to provide the DB_REPLICATION_USER as well"
         echo ""
         exit -1
       fi
@@ -118,7 +118,7 @@ configure_mariadb_replication() {
       validate_db_database
 
       if [ ! $DB_REPLICATION_USER ]; then
-        echo "In order to setup a replication slave you need to provide the DB_REPLICATION_USER as well"
+        echo "==> In order to setup a replication slave you need to provide the DB_REPLICATION_USER as well"
         echo ""
         exit -1
       fi
@@ -287,7 +287,7 @@ run_command() {
 ################## Start ####################
 #############################################
 
-echo "==> Start of BoxBetty's docker-entrypoint-bb.sh with parameters: '$@'"
+echo "==> Start of docker-entrypoint-2.sh with parameters: '$@'"
 
 if [ "$IS_NEW_INSTANCE" = "true" ]; then
   # MariaDB's docker-entrypoint.sh would have initialised a new database instance by now ;)

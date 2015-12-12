@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "==> Start of BoxBetty's MariaDB-Galera run.sh"
+echo "==> Start of MariaDB-Galera run.sh"
 
 DATADIR=$(my_print_defaults mysqld | grep -- "--datadir" | cut -f2 -d"=")
 echo "==> DATADIR is '$DATADIR'"
@@ -15,7 +15,7 @@ fi
 modDockerEntryPoint="/docker-entrypoint-modified.sh"
 head -n -1 /docker-entrypoint.sh > $modDockerEntryPoint
 chmod +x $modDockerEntryPoint
-echo "exec \"/docker-entrypoint-bb.sh\" \"\$@\"" >> $modDockerEntryPoint
+echo "exec \"/docker-entrypoint-2.sh\" \"\$@\"" >> $modDockerEntryPoint
 
 echo "==> Running modified MariaDB Docker container's docker-entrypoint.sh with args: '$@'"
 exec "$modDockerEntryPoint" "$@"
